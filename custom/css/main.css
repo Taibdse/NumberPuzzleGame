@@ -1,0 +1,15 @@
+#gameArea{
+  margin: auto;
+  display: grid;
+  grid-gap: 0px 0px;
+}
+.square{
+  height: 100px;
+  text-align: center;
+  line-height: 100px;
+  font-weight: bold;
+  font-size: 2em;
+  color: whiten;
+  cursor: pointer;
+  border: 1px solid #ccc;
+}
