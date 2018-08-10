@@ -4,12 +4,29 @@ let arrNumber = [];
 let $gameArea = $('#gameArea');
 let emptySquarePos = -1;
 let gameAreaSize = 300;
+let moveCount = 0;
+let timePassed = 0;
 
 $(() => {
   $('#selectLevelGame').change(changeSize);
   $('#btnNewGame').click(startGame);
+  $('#moveCount').text(moveCount);
+  $('#timeLeft').text(timePassed);
+  setInterval(makeTimer, 1000);
   startGame();
 })
+
+function changeFormatTime(seconds){
+  if(seconds < 60) return seconds;
+  if(seconds < 60 * 60) return `${Math.floor(seconds/60)} : ${seconds%60}`;
+  return `${Math.floor(seconds/3600)} : ${Math.floor((seconds%3600)/60)} : ${seconds % 3600 % 60}`
+}
+
+function makeTimer(){
+  if(isWinGame) return;
+  timePassed++;
+  $('#timeLeft').text(changeFormatTime(timePassed));
+}
 
 function changeSize(e){
   let val = e.target.value;
@@ -17,8 +34,16 @@ function changeSize(e){
   gameAreaSize = 100 * size;
 }
 
-function startGame(){
+function resetNewGame(){
   isWinGame = false;
+  moveCount = 0;
+  timePassed = 0;
+  $('#timeLeft').text(0);
+  $('#moveCount').text(0);
+}
+
+function startGame(){
+  resetNewGame();
   arrNumber = createArrNum();
   let gridTemplate = '';
   for(let i = 1; i <= size; i++) gridTemplate += 'auto ';
@@ -47,6 +72,8 @@ function handleClickSquare(e){
   if(val == '') return;
   let clickedPos = arrNumber.findIndex(num => Number(val) == num);
   if(!checkAdjacent(clickedPos)) return;
+  moveCount++;
+  $('#moveCount').text(moveCount);
   $clickedEle.text('');
   $('#gameArea').find('.square').eq(emptySquarePos).text(val);
   arrNumber[clickedPos] = Math.pow(size, 2);
